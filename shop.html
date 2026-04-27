@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gallery – Cool Canvas</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    .shop-header { background: var(--surface); padding: 140px 0 80px; text-align: center; color: var(--text); position: relative; border-bottom: 1px solid var(--border); overflow: hidden; }
+    .shop-header::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(157,78,221,0.1), rgba(255,107,157,0.05)); z-index: 0; }
+    .shop-header .container { position: relative; z-index: 1; }
+    .shop-header h1 { font-size: 3.5rem; color: var(--text); margin-bottom: 15px; text-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+    .shop-header p { color: var(--gray); font-size: 1.15rem; font-weight: 500; }
+    
+    .shop-container { display: flex; gap: 40px; padding: 60px 20px; max-width: 1200px; margin: 0 auto; position: relative; align-items: flex-start; }
+    .filters { width: 250px; flex-shrink: 0; position: sticky; top: 100px; max-height: calc(100vh - 120px); overflow-y: auto; padding-right: 15px; }
+    /* Artsy Scrollbar for filters */
+    .filters::-webkit-scrollbar { width: 6px; }
+    .filters::-webkit-scrollbar-track { background: transparent; }
+    .filters::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+    
+    .filter-group { margin-bottom: 30px; background: var(--surface); padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid var(--border); }
+    .filter-group h3 { font-size: 1.2rem; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid rgba(157,78,221,0.2); color: var(--text); }
+    .filter-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .filter-btn { background: none; border: none; color: var(--gray); font-size: 0.95rem; cursor: pointer; text-align: left; padding: 8px 12px; transition: var(--transition); width: 100%; border-radius: 10px; font-weight: 500; }
+    .filter-btn:hover, .filter-btn.active { color: var(--primary); font-weight: 600; background: rgba(157,78,221,0.08); padding-left: 15px; box-shadow: inset 3px 0 0 var(--primary); }
+    .shop-main { flex: 1; }
+    .shop-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+    .results-count { font-weight: 500; color: var(--gray); }
+    
+    @media (max-width: 768px) {
+      .shop-container { flex-direction: column; }
+      .filters { width: 100%; }
+      .filter-list { flex-direction: row; flex-wrap: wrap; }
+      .filter-btn { width: auto; background: var(--surface); padding: 8px 15px; border-radius: 20px; border: 1px solid var(--border); }
+      .filter-btn.active { background: var(--primary); color: white; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar scrolled" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="logo">
+      <span class="logo-icon">🎨</span>
+      <span class="logo-text">Cool<span class="logo-accent">Canvas</span></span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="shop.html" class="nav-link">Shop</a>
+      <a href="about.html" class="nav-link">About</a>
+    </div>
+    <div class="nav-actions">
+      <button class="btn-icon" id="searchToggle" title="Search"><i class="fas fa-search"></i></button>
+      <a href="cart.html" class="btn-icon" id="cartBtn" title="Cart">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </a>
+      <button class="btn-icon wishlist-btn" id="wishlistNavBtn" title="Wishlist">
+        <i class="fas fa-heart"></i>
+        <span class="cart-badge" id="wishlistBadge">0</span>
+      </button>
+      <div class="user-menu" id="userMenu">
+        <button class="btn-icon" id="userMenuBtn"><i class="fas fa-user-circle"></i></button>
+        <div class="dropdown" id="userDropdown">
+          <div id="guestLinks">
+            <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+            <a href="vendor.html"><i class="fas fa-palette"></i> Sell Your Art</a>
+          </div>
+          <div id="authLinks" style="display:none">
+            <a href="profile.html"><i class="fas fa-user"></i> My Profile</a>
+            <a href="orders.html"><i class="fas fa-box"></i> My Orders</a>
+            <a href="vendor.html" id="vendorDashLink" style="display:none"><i class="fas fa-store"></i> Vendor Dashboard</a>
+            <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          </div>
+        </div>
+      </div>
+      <button class="hamburger" id="hamburger"><i class="fas fa-bars"></i></button>
+    </div>
+  </div>
+  <!-- Search Bar -->
+  <div class="search-bar" id="searchBar">
+    <div class="search-inner">
+      <input type="text" placeholder="Search paintings, artists, styles…" id="searchInput" autocomplete="off"/>
+      <button onclick="doSearch()"><i class="fas fa-search"></i> Search</button>
+    </div>
+  </div>
+</nav>
+
+<header class="shop-header">
+  <div class="container">
+    <h1 id="shopTitle">The Gallery</h1>
+    <p>Discover beautiful original artworks</p>
+  </div>
+</header>
+
+<div class="shop-container">
+  <aside class="filters">
+    <div class="filter-group">
+      <h3>Categories</h3>
+      <ul class="filter-list" id="catFilter">
+        <li><button class="filter-btn active" data-cat="all">All Artworks</button></li>
+        <li><button class="filter-btn" data-cat="abstract">Abstract</button></li>
+        <li><button class="filter-btn" data-cat="landscape">Landscapes</button></li>
+        <li><button class="filter-btn" data-cat="portrait">Portraits</button></li>
+        <li><button class="filter-btn" data-cat="still-life">Still Life</button></li>
+        <li><button class="filter-btn" data-cat="modern">Modern Art</button></li>
+        <li><button class="filter-btn" data-cat="digital">Digital Art</button></li>
+        <li><button class="filter-btn" data-cat="sketch">Sketches</button></li>
+        <li><button class="filter-btn" data-cat="minimalist">Minimalist</button></li>
+        <li><button class="filter-btn" data-cat="pop-art">Pop Art</button></li>
+      </ul>
+    </div>
+  </aside>
+  
+  <main class="shop-main">
+    <div class="shop-toolbar">
+      <div class="results-count" id="resultsCount">Loading...</div>
+    </div>
+    <div class="products-grid" id="shopGrid"></div>
+  </main>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- WISHLIST SIDEBAR -->
+<div class="wishlist-sidebar" id="wishlistSidebar">
+  <div class="sidebar-header">
+    <h3>💖 My Wishlist</h3>
+    <button onclick="closeWishlist()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="sidebar-items" id="wishlistItems"></div>
+</div>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeWishlist()"></div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><span class="logo-icon">🎨</span><span class="logo-text">Cool<span class="logo-accent">Canvas</span></span></div>
+        <p>The paradise for painting artists and art enthusiasts. Discover, collect and celebrate original art.</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-pinterest"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <a href="shop.html?cat=abstract">Abstract Art</a>
+        <a href="shop.html?cat=landscape">Landscapes</a>
+        <a href="shop.html?cat=portrait">Portraits</a>
+        <a href="shop.html?cat=modern">Modern Art</a>
+        <a href="shop.html?cat=watercolor">Watercolor</a>
+      </div>
+      <div class="footer-col">
+        <h4>Sell</h4>
+        <a href="vendor.html">Become a Vendor</a>
+        <a href="vendor.html#how">How it Works</a>
+        <a href="#">Artist Guidelines</a>
+        <a href="#">Pricing</a>
+      </div>
+      <div class="footer-col">
+        <h4>Help</h4>
+        <a href="#">FAQs</a>
+        <a href="#">Shipping Info</a>
+        <a href="#">Returns</a>
+        <a href="#">Contact Us</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 Cool Canvas. All rights reserved.</p>
+      <p>Designed with <span style="color: var(--secondary)">♥</span> for Art Lovers</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const cat = urlParams.get('cat');
+    const search = urlParams.get('search');
+    
+    let currentProducts = getProducts();
+    
+    if (search) {
+      currentProducts = searchProducts(search);
+      document.getElementById('shopTitle').textContent = `Search: "${search}"`;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    } else if (cat) {
+      currentProducts = getProductsByCategory(cat);
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.cat === cat);
+      });
+      document.getElementById('shopTitle').textContent = cat.charAt(0).toUpperCase() + cat.slice(1) + ' Art';
+    }
+    
+    function renderShop() {
+      document.getElementById('resultsCount').textContent = `Showing ${currentProducts.length} results`;
+      renderProductGrid('shopGrid', currentProducts);
+    }
+    
+    renderShop();
+    
+    // Filter click events
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        const c = e.target.dataset.cat;
+        
+        window.history.pushState({}, '', c === 'all' ? 'shop.html' : `shop.html?cat=${c}`);
+        
+        document.getElementById('shopTitle').textContent = c === 'all' ? 'The Gallery' : c.charAt(0).toUpperCase() + c.slice(1) + ' Art';
+        currentProducts = getProductsByCategory(c);
+        renderShop();
+      });
+    });
+  });
+</script>
+</body>
+</html>

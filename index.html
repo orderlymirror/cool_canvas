@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cool Canvas – Where Art Comes Alive</title>
+  <meta name="description" content="Buy and sell original paintings on Cool Canvas – the paradise for painting artists and art enthusiasts."/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="logo">
+      <span class="logo-icon">🎨</span>
+      <span class="logo-text">Cool<span class="logo-accent">Canvas</span></span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html" class="nav-link active">Home</a>
+      <a href="shop.html" class="nav-link">Shop</a>
+      <a href="about.html" class="nav-link">About</a>
+    </div>
+    <div class="nav-actions">
+      <button class="btn-icon" id="searchToggle" title="Search"><i class="fas fa-search"></i></button>
+      <a href="cart.html" class="btn-icon" id="cartBtn" title="Cart">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </a>
+      <button class="btn-icon wishlist-btn" id="wishlistNavBtn" title="Wishlist">
+        <i class="fas fa-heart"></i>
+        <span class="cart-badge" id="wishlistBadge">0</span>
+      </button>
+      <div class="user-menu" id="userMenu">
+        <button class="btn-icon" id="userMenuBtn"><i class="fas fa-user-circle"></i></button>
+        <div class="dropdown" id="userDropdown">
+          <div id="guestLinks">
+            <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+            <a href="vendor.html"><i class="fas fa-palette"></i> Sell Your Art</a>
+          </div>
+          <div id="authLinks" style="display:none">
+            <a href="profile.html"><i class="fas fa-user"></i> My Profile</a>
+            <a href="orders.html"><i class="fas fa-box"></i> My Orders</a>
+            <a href="vendor.html" id="vendorDashLink" style="display:none"><i class="fas fa-store"></i> Vendor Dashboard</a>
+            <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          </div>
+        </div>
+      </div>
+      <button class="hamburger" id="hamburger"><i class="fas fa-bars"></i></button>
+    </div>
+  </div>
+  <!-- Search Bar -->
+  <div class="search-bar" id="searchBar">
+    <div class="search-inner">
+      <input type="text" placeholder="Search paintings, artists, styles…" id="searchInput" autocomplete="off"/>
+      <button onclick="doSearch()"><i class="fas fa-search"></i> Search</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <img src="images/hero_banner_v5.png" alt="Cool Canvas Hero" class="hero-img"/>
+    <div class="hero-overlay"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">Your Art Paradise Awaits</div>
+    <h1 class="hero-title">Where Every Stroke<br/><em>Tells a Story</em></h1>
+    <p class="hero-sub">Discover, collect, and fall in love with original paintings from talented artists worldwide. From vibrant abstracts to serene landscapes.</p>
+    <div class="hero-cta">
+      <a href="shop.html" class="btn-primary"><i class="fas fa-palette"></i> Explore Gallery</a>
+      <a href="vendor.html" class="btn-ghost"><i class="fas fa-brush"></i> Sell Your Art</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-n">1,200+</span><span class="stat-l">Paintings</span></div>
+      <div class="stat"><span class="stat-n">340+</span><span class="stat-l">Artists</span></div>
+      <div class="stat"><span class="stat-n">8,000+</span><span class="stat-l">Happy Collectors</span></div>
+    </div>
+  </div>
+  <div class="scroll-hint"><span>Scroll to explore</span><i class="fas fa-chevron-down"></i></div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="section categories-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Browse by <span class="accent">Category</span></h2>
+      <p>Find your perfect piece across all art styles</p>
+    </div>
+    <div class="categories-grid">
+      <a href="shop.html?cat=abstract" class="cat-card" style="--cat-color:#ff6b9d">
+        <div class="cat-icon">🌀</div>
+        <h3>Abstract</h3>
+        <p>Bold & expressive</p>
+        <span class="cat-count">240 works</span>
+      </a>
+      <a href="shop.html?cat=landscape" class="cat-card" style="--cat-color:#06d6a0">
+        <div class="cat-icon">🌄</div>
+        <h3>Landscapes</h3>
+        <p>Nature's beauty</p>
+        <span class="cat-count">180 works</span>
+      </a>
+      <a href="shop.html?cat=portrait" class="cat-card" style="--cat-color:#ffd166">
+        <div class="cat-icon">🎭</div>
+        <h3>Portraits</h3>
+        <p>Faces & emotions</p>
+        <span class="cat-count">156 works</span>
+      </a>
+      <a href="shop.html?cat=still-life" class="cat-card" style="--cat-color:#a78bfa">
+        <div class="cat-icon">🌸</div>
+        <h3>Still Life</h3>
+        <p>Timeless moments</p>
+        <span class="cat-count">120 works</span>
+      </a>
+      <a href="shop.html?cat=modern" class="cat-card" style="--cat-color:#fb923c">
+        <div class="cat-icon">✨</div>
+        <h3>Modern Art</h3>
+        <p>Contemporary vibes</p>
+        <span class="cat-count">200 works</span>
+      </a>
+      <a href="shop.html?cat=watercolor" class="cat-card" style="--cat-color:#38bdf8">
+        <div class="cat-icon">💧</div>
+        <h3>Watercolor</h3>
+        <p>Soft & flowing</p>
+        <span class="cat-count">145 works</span>
+      </a>
+      <a href="shop.html?cat=digital" class="cat-card" style="--cat-color:#ec4899">
+        <div class="cat-icon">💻</div>
+        <h3>Digital Art</h3>
+        <p>Modern tech art</p>
+        <span class="cat-count">92 works</span>
+      </a>
+      <a href="shop.html?cat=sketch" class="cat-card" style="--cat-color:#64748b">
+        <div class="cat-icon">✏️</div>
+        <h3>Sketches</h3>
+        <p>Raw & artistic</p>
+        <span class="cat-count">78 works</span>
+      </a>
+      <a href="shop.html?cat=minimalist" class="cat-card" style="--cat-color:#94a3b8">
+        <div class="cat-icon">⚪</div>
+        <h3>Minimalist</h3>
+        <p>Less is more</p>
+        <span class="cat-count">64 works</span>
+      </a>
+      <a href="shop.html?cat=pop-art" class="cat-card" style="--cat-color:#eab308">
+        <div class="cat-icon">💥</div>
+        <h3>Pop Art</h3>
+        <p>Bold & iconic</p>
+        <span class="cat-count">56 works</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED ARTWORKS -->
+<section class="section featured-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Featured <span class="accent">Artworks</span></h2>
+      <p>Curated picks by our art experts this week</p>
+      <a href="shop.html" class="view-all-link">View All <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="products-grid" id="featuredGrid"></div>
+  </div>
+</section>
+
+<!-- BANNER STRIP -->
+<section class="banner-strip">
+  <div class="banner-content">
+    <div class="banner-item"><i class="fas fa-truck"></i><span>Free Shipping on orders over ₹2000</span></div>
+    <div class="banner-item"><i class="fas fa-shield-alt"></i><span>100% Authentic Original Art</span></div>
+    <div class="banner-item"><i class="fas fa-undo"></i><span>Easy 14-day Returns</span></div>
+    <div class="banner-item"><i class="fas fa-certificate"></i><span>Certificate of Authenticity</span></div>
+  </div>
+</section>
+
+<!-- TRENDING -->
+<section class="section trending-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Trending <span class="accent">Now</span></h2>
+      <p>What collectors are loving this season</p>
+      <a href="shop.html" class="view-all-link">View All <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="products-grid" id="trendingGrid"></div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section how-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>How <span class="accent">It Works</span></h2>
+      <p>Your journey from discovery to owning a masterpiece</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-icon">🔍</div>
+        <h3>Discover</h3>
+        <p>Browse thousands of original paintings across multiple categories and styles.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-icon">❤️</div>
+        <h3>Wishlist</h3>
+        <p>Save your favourite artworks to your wishlist and revisit them anytime.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-icon">🛒</div>
+        <h3>Add to Cart</h3>
+        <p>Add pieces to your cart. Each painting comes with a certificate of authenticity.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">04</div>
+        <div class="step-icon">🏠</div>
+        <h3>Enjoy</h3>
+        <p>Receive your artwork, professionally packaged and ready to hang on your wall.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter-section">
+  <div class="container">
+    <div class="newsletter-box">
+      <div class="newsletter-text">
+        <h2>Join the <span class="accent">Art Community</span></h2>
+        <p>Get weekly curated art, exclusive deals, and artist spotlights in your inbox.</p>
+      </div>
+      <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
+        <input type="email" placeholder="Enter your email address" required/>
+        <button type="submit" class="btn-primary">Subscribe 🎨</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><span class="logo-icon">🎨</span><span class="logo-text">Cool<span class="logo-accent">Canvas</span></span></div>
+        <p>The paradise for painting artists and art enthusiasts. Discover, collect and celebrate original art.</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-pinterest"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <a href="shop.html?cat=abstract">Abstract Art</a>
+        <a href="shop.html?cat=landscape">Landscapes</a>
+        <a href="shop.html?cat=portrait">Portraits</a>
+        <a href="shop.html?cat=modern">Modern Art</a>
+        <a href="shop.html?cat=watercolor">Watercolor</a>
+      </div>
+      <div class="footer-col">
+        <h4>Sell</h4>
+        <a href="vendor.html">Become a Vendor</a>
+        <a href="vendor.html#how">How it Works</a>
+        <a href="#">Artist Guidelines</a>
+        <a href="#">Pricing</a>
+      </div>
+      <div class="footer-col">
+        <h4>Help</h4>
+        <a href="#">FAQs</a>
+        <a href="#">Shipping Info</a>
+        <a href="#">Returns</a>
+        <a href="#">Contact Us</a>
+        <a href="#">Privacy Policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Cool Canvas. Made with ❤️ & 🎨 for art lovers everywhere.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- WISHLIST SIDEBAR -->
+<div class="wishlist-sidebar" id="wishlistSidebar">
+  <div class="sidebar-header">
+    <h3>💖 My Wishlist</h3>
+    <button onclick="closeWishlist()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="sidebar-items" id="wishlistItems"></div>
+</div>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeWishlist()"></div>
+
+<script src="js/data.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

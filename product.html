@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Product Details – Cool Canvas</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    .product-page { padding: 120px 20px 80px; max-width: 1200px; margin: 0 auto; display: flex; gap: 60px; align-items: flex-start; }
+    
+    /* Image Container — Museum Frame Effect */
+    .product-image-container { flex: 1.2; position: relative; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.3); background: #f0f0f0; display: flex; align-items: center; justify-content: center; border: 15px solid white; outline: 1px solid rgba(0,0,0,0.1); }
+    .product-image-container::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; box-shadow: inset 0 0 20px rgba(0,0,0,0.1); pointer-events: none; z-index: 10; }
+    .product-image-container img { width: 100%; height: auto; object-fit: cover; max-height: 80vh; transition: transform 0.5s ease; }
+    .product-image-container:hover img { transform: scale(1.02); }
+    
+    .product-badges { position: absolute; top: 20px; left: 20px; display: flex; gap: 10px; z-index: 20; }
+    .product-badges .badge { padding: 6px 14px; font-size: 0.8rem; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+    
+    /* Typography & Details */
+    .product-details { flex: 1; display: flex; flex-direction: column; justify-content: center; padding-top: 20px; }
+    .breadcrumb { color: var(--gray); font-size: 0.95rem; margin-bottom: 25px; text-transform: capitalize; font-weight: 500; }
+    .breadcrumb a { color: var(--primary); transition: color 0.3s; }
+    .breadcrumb a:hover { color: var(--secondary); text-decoration: underline; }
+    
+    .product-title { font-size: 3.5rem; font-family: var(--font-head); margin-bottom: 15px; line-height: 1.1; color: var(--dark); text-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+    .product-artist { font-size: 1.2rem; color: var(--gray); margin-bottom: 35px; display: flex; align-items: center; gap: 10px; }
+    .product-artist i { background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.4rem; }
+    
+    .product-price { font-size: 3rem; font-weight: 800; background: linear-gradient(90deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 25px; display: inline-block; }
+    
+    .product-desc { font-size: 1.15rem; line-height: 1.8; color: var(--gray); margin-bottom: 45px; font-weight: 300; }
+    
+    /* Action Buttons */
+    .product-actions-large { display: flex; gap: 20px; margin-bottom: 50px; }
+    .product-actions-large button { flex: 1; padding: 20px; font-size: 1.1rem; border-radius: 30px; font-weight: 700; display: flex; justify-content: center; align-items: center; gap: 12px; cursor: pointer; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; overflow: hidden; z-index: 1; border: none; }
+    
+    .btn-add-cart { color: white; box-shadow: 0 10px 30px rgba(157, 78, 221, 0.3); }
+    .btn-add-cart::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent)); background-size: 200% 100%; transition: all 0.5s ease; z-index: -1; }
+    .btn-add-cart:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(157, 78, 221, 0.5); color: white; }
+    .btn-add-cart:hover::before { background-position: 100% 0; }
+    .btn-add-cart:disabled { background: var(--border); color: var(--gray); cursor: not-allowed; transform: none; box-shadow: none; opacity: 0.5; }
+    .btn-add-cart:disabled::before { display: none; }
+    
+    .btn-wishlist { background: transparent; color: var(--text); border: 2px solid var(--border) !important; }
+    .btn-wishlist::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: rgba(255,107,157,0.1); transition: all 0.3s ease; z-index: -1; }
+    .btn-wishlist:hover { border-color: var(--secondary) !important; color: var(--secondary); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(255,107,157,0.15); }
+    .btn-wishlist:hover::before, .btn-wishlist.active::before { left: 0; }
+    .btn-wishlist.active { border-color: var(--secondary) !important; color: var(--secondary); background: rgba(255,107,157,0.05); }
+    
+    /* Features */
+    .features-list { list-style: none; display: flex; flex-direction: column; gap: 18px; border-top: 1px dashed var(--border); padding-top: 35px; }
+    .features-list li { display: flex; align-items: center; gap: 18px; color: var(--text); font-weight: 500; font-size: 1.05rem; }
+    .features-list i { font-size: 1.6rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; width: 35px; text-align: center; }
+    
+    @media (max-width: 992px) {
+      .product-page { flex-direction: column; align-items: center; }
+      .product-image-container { width: 100%; max-width: 700px; }
+      .product-title { font-size: 2.8rem; }
+      .product-actions-large { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar scrolled" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="logo">
+      <span class="logo-icon">🎨</span>
+      <span class="logo-text">Cool<span class="logo-accent">Canvas</span></span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="shop.html" class="nav-link">Shop</a>
+      <a href="about.html" class="nav-link">About</a>
+    </div>
+    <div class="nav-actions">
+      <button class="btn-icon" id="searchToggle" title="Search"><i class="fas fa-search"></i></button>
+      <a href="cart.html" class="btn-icon" id="cartBtn" title="Cart">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </a>
+      <button class="btn-icon wishlist-btn" id="wishlistNavBtn" title="Wishlist">
+        <i class="fas fa-heart"></i>
+        <span class="cart-badge" id="wishlistBadge">0</span>
+      </button>
+      <div class="user-menu" id="userMenu">
+        <button class="btn-icon" id="userMenuBtn"><i class="fas fa-user-circle"></i></button>
+        <div class="dropdown" id="userDropdown">
+          <div id="guestLinks">
+            <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+            <a href="vendor.html"><i class="fas fa-palette"></i> Sell Your Art</a>
+          </div>
+          <div id="authLinks" style="display:none">
+            <a href="profile.html"><i class="fas fa-user"></i> My Profile</a>
+            <a href="orders.html"><i class="fas fa-box"></i> My Orders</a>
+            <a href="vendor.html" id="vendorDashLink" style="display:none"><i class="fas fa-store"></i> Vendor Dashboard</a>
+            <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          </div>
+        </div>
+      </div>
+      <button class="hamburger" id="hamburger"><i class="fas fa-bars"></i></button>
+    </div>
+  </div>
+  <!-- Search Bar -->
+  <div class="search-bar" id="searchBar">
+    <div class="search-inner">
+      <input type="text" placeholder="Search paintings, artists, styles…" id="searchInput" autocomplete="off"/>
+      <button onclick="doSearch()"><i class="fas fa-search"></i> Search</button>
+    </div>
+  </div>
+</nav>
+
+<div id="productContent">
+  <!-- Content generated by JS -->
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- WISHLIST SIDEBAR -->
+<div class="wishlist-sidebar" id="wishlistSidebar">
+  <div class="sidebar-header">
+    <h3>💖 My Wishlist</h3>
+    <button onclick="closeWishlist()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="sidebar-items" id="wishlistItems"></div>
+</div>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeWishlist()"></div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><span class="logo-icon">🎨</span><span class="logo-text">Cool<span class="logo-accent">Canvas</span></span></div>
+        <p>The paradise for painting artists and art enthusiasts. Discover, collect and celebrate original art.</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-pinterest"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <a href="shop.html?cat=abstract">Abstract Art</a>
+        <a href="shop.html?cat=landscape">Landscapes</a>
+        <a href="shop.html?cat=portrait">Portraits</a>
+        <a href="shop.html?cat=modern">Modern Art</a>
+        <a href="shop.html?cat=watercolor">Watercolor</a>
+      </div>
+      <div class="footer-col">
+        <h4>Sell</h4>
+        <a href="vendor.html">Become a Vendor</a>
+        <a href="vendor.html#how">How it Works</a>
+        <a href="#">Artist Guidelines</a>
+        <a href="#">Pricing</a>
+      </div>
+      <div class="footer-col">
+        <h4>Help</h4>
+        <a href="#">FAQs</a>
+        <a href="#">Shipping Info</a>
+        <a href="#">Returns</a>
+        <a href="#">Contact Us</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 Cool Canvas. All rights reserved.</p>
+      <p>Designed with <span style="color: var(--secondary)">♥</span> for Art Lovers</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id');
+    const container = document.getElementById('productContent');
+    
+    if (!productId) {
+      container.innerHTML = '<div style="text-align:center; padding:150px 20px;"><h2>Artwork not found</h2><a href="shop.html" class="btn-primary" style="margin-top:20px;">Return to Shop</a></div>';
+      return;
+    }
+    
+    const product = getProductById(productId);
+    
+    if (!product) {
+      container.innerHTML = '<div style="text-align:center; padding:150px 20px;"><h2>Artwork not found</h2><a href="shop.html" class="btn-primary" style="margin-top:20px;">Return to Shop</a></div>';
+      return;
+    }
+    
+    const inWish = isInWishlist(product.id);
+    const heartClass = inWish ? 'fas fa-heart' : 'far fa-heart';
+    
+    container.innerHTML = `
+      <div class="product-page">
+        <div class="product-image-container">
+          <div class="product-badges">
+            ${product.isNew ? '<span class="badge badge-new" style="font-size:0.9rem; padding:8px 15px;">New</span>' : ''}
+            ${product.isSold ? '<span class="badge badge-sold" style="font-size:0.9rem; padding:8px 15px;">Sold Out</span>' : ''}
+          </div>
+          <img src="${product.image}" alt="${product.title}">
+        </div>
+        
+        <div class="product-details">
+          <div class="breadcrumb">
+            <a href="index.html">Home</a> / <a href="shop.html">Gallery</a> / <a href="shop.html?cat=${product.category}">${product.category}</a> / ${product.title}
+          </div>
+          
+          <h1 class="product-title">${product.title}</h1>
+          <div class="product-artist">
+            <i class="fas fa-paint-brush"></i> Created by <strong>${product.artist}</strong>
+          </div>
+          
+          <div class="product-price">${formatPrice(product.price)}</div>
+          
+          <p class="product-desc">${product.desc}</p>
+          
+          <div class="product-actions-large">
+            <button class="btn-add-cart" onclick="addToCart(${product.id})" ${product.isSold ? 'disabled' : ''}>
+              <i class="fas fa-shopping-cart"></i> ${product.isSold ? 'Sold Out' : 'Add to Cart'}
+            </button>
+            <button class="btn-wishlist ${inWish ? 'active' : ''} wishlist-btn-large" data-id="${product.id}" onclick="toggleWishlistLarge(${product.id}, this)">
+              <i class="${heartClass}"></i> ${inWish ? 'Saved to Wishlist' : 'Add to Wishlist'}
+            </button>
+          </div>
+          
+          <ul class="features-list">
+            <li><i class="fas fa-certificate"></i> Includes Certificate of Authenticity</li>
+            <li><i class="fas fa-truck"></i> Free Global Shipping</li>
+            <li><i class="fas fa-undo"></i> 14-Day Free Returns</li>
+            <li><i class="fas fa-shield-alt"></i> Secure Payment Processing</li>
+          </ul>
+        </div>
+      </div>
+    `;
+    
+    // Update title
+    document.title = `${product.title} – Cool Canvas`;
+  });
+  
+  function toggleWishlistLarge(id, btn) {
+    toggleWishlist(id);
+    const inWish = isInWishlist(id);
+    const icon = btn.querySelector('i');
+    if (inWish) {
+      btn.classList.add('active');
+      icon.className = 'fas fa-heart';
+      btn.innerHTML = `<i class="fas fa-heart"></i> Saved to Wishlist`;
+    } else {
+      btn.classList.remove('active');
+      icon.className = 'far fa-heart';
+      btn.innerHTML = `<i class="far fa-heart"></i> Add to Wishlist`;
+    }
+  }
+</script>
+</body>
+</html>

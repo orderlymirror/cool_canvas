@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Us – Cool Canvas</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    .about-hero { background: url('images/hero_banner.png') center/cover no-repeat; padding: 150px 20px 100px; text-align: center; color: var(--hero-text); position: relative; }
+    .about-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: var(--hero-overlay); backdrop-filter: blur(5px); }
+    .about-hero-content { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; color: var(--hero-text); transition: color 0.5s ease; }
+    .about-hero h1 { font-size: 3.5rem; margin-bottom: 20px; color: var(--hero-text); }
+    .about-hero p { font-size: 1.2rem; opacity: 0.9; }
+    
+    .about-section { padding: 80px 20px; max-width: 1000px; margin: 0 auto; display: flex; align-items: center; gap: 50px; }
+    .about-section:nth-child(even) { flex-direction: row-reverse; }
+    .about-text { flex: 1; }
+    .about-text h2 { font-size: 2.5rem; margin-bottom: 20px; color: var(--dark); }
+    .about-text p { color: var(--gray); font-size: 1.1rem; margin-bottom: 20px; }
+    .about-image { flex: 1; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+    .about-image img { width: 100%; height: 100%; object-fit: cover; }
+    
+    .team-section { background: var(--surface); padding: 80px 20px; text-align: center; border-top: 1px solid var(--border); }
+    .team-grid { display: flex; justify-content: center; gap: 30px; max-width: 1000px; margin: 40px auto 0; }
+    .team-member { padding: 30px; border-radius: var(--radius); background: var(--bg); border: 1px solid var(--border); transition: var(--transition); width: 320px; }
+    .team-member:hover { transform: translateY(-10px); box-shadow: var(--shadow); border-color: var(--primary); }
+    .team-avatar { width: 140px; height: 140px; border-radius: 50%; margin: 0 auto 20px; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; font-size: 3.5rem; color: white; box-shadow: 0 10px 20px rgba(157,78,221,0.2); }
+    .team-member h3 { font-size: 1.5rem; margin-bottom: 5px; font-family: var(--font-head); }
+    .team-member p { color: var(--primary); font-weight: 600; font-size: 1rem; }
+    
+    @media (max-width: 768px) {
+      .about-section { flex-direction: column !important; text-align: center; }
+      .about-hero h1 { font-size: 2.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar scrolled" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="logo">
+      <span class="logo-icon">🎨</span>
+      <span class="logo-text">Cool<span class="logo-accent">Canvas</span></span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="shop.html" class="nav-link">Shop</a>
+      <a href="about.html" class="nav-link active">About</a>
+    </div>
+    <div class="nav-actions">
+      <button class="btn-icon" id="searchToggle" title="Search"><i class="fas fa-search"></i></button>
+      <a href="cart.html" class="btn-icon" id="cartBtn" title="Cart">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </a>
+      <button class="btn-icon wishlist-btn" id="wishlistNavBtn" title="Wishlist">
+        <i class="fas fa-heart"></i>
+        <span class="cart-badge" id="wishlistBadge">0</span>
+      </button>
+      <div class="user-menu" id="userMenu">
+        <button class="btn-icon" id="userMenuBtn"><i class="fas fa-user-circle"></i></button>
+        <div class="dropdown" id="userDropdown">
+          <div id="guestLinks">
+            <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+            <a href="vendor.html"><i class="fas fa-palette"></i> Sell Your Art</a>
+          </div>
+          <div id="authLinks" style="display:none">
+            <a href="profile.html"><i class="fas fa-user"></i> My Profile</a>
+            <a href="orders.html"><i class="fas fa-box"></i> My Orders</a>
+            <a href="vendor.html" id="vendorDashLink" style="display:none"><i class="fas fa-store"></i> Vendor Dashboard</a>
+            <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          </div>
+        </div>
+      </div>
+      <button class="hamburger" id="hamburger"><i class="fas fa-bars"></i></button>
+    </div>
+  </div>
+  <div class="search-bar" id="searchBar">
+    <div class="search-inner">
+      <input type="text" placeholder="Search paintings, artists, styles…" id="searchInput" autocomplete="off"/>
+      <button onclick="doSearch()"><i class="fas fa-search"></i> Search</button>
+    </div>
+  </div>
+</nav>
+
+<header class="about-hero">
+  <div class="about-hero-content">
+    <h1>Our Mission & Vision</h1>
+    <p>We believe art should be accessible to everyone, and artists should be empowered to share their vision with the world.</p>
+  </div>
+</header>
+
+<div class="about-section">
+  <div class="about-text">
+    <h2>Empowering Creators</h2>
+    <p>Cool Canvas was founded with a single goal: to build a bridge between talented, emerging artists and passionate art collectors. We provide a platform where creativity thrives without barriers.</p>
+    <p>By keeping fees low and prioritizing the artist's independence, we ensure that the creators get the recognition and compensation they truly deserve.</p>
+  </div>
+  <div class="about-image">
+    <img src="images/painting_portrait1.png" alt="Artist at work">
+  </div>
+</div>
+
+<div class="about-section">
+  <div class="about-text">
+    <h2>Curating Excellence</h2>
+    <p>Every piece on Cool Canvas is original. We believe in the power of an authentic brushstroke, the texture of a real canvas, and the emotion captured in true art.</p>
+    <p>From vibrant digital illustrations to timeless oil paintings, our gallery is a testament to human creativity and imagination.</p>
+  </div>
+  <div class="about-image">
+    <img src="images/painting_abstract1.png" alt="Gallery artwork">
+  </div>
+</div>
+
+<section class="team-section">
+  <h2>Meet the Team</h2>
+  <p style="color:var(--gray); margin-top:10px;">The passionate folks behind Cool Canvas</p>
+  <div class="team-grid">
+    <div class="team-member">
+      <div class="team-avatar"><i class="fas fa-crown"></i></div>
+      <h3>Sejal Kishan Verma</h3>
+      <p>Visionary Director</p>
+    </div>
+  </div>
+</section>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- WISHLIST SIDEBAR -->
+<div class="wishlist-sidebar" id="wishlistSidebar">
+  <div class="sidebar-header">
+    <h3>💖 My Wishlist</h3>
+    <button onclick="closeWishlist()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="sidebar-items" id="wishlistItems"></div>
+</div>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeWishlist()"></div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><span class="logo-icon">🎨</span><span class="logo-text">Cool<span class="logo-accent">Canvas</span></span></div>
+        <p>The paradise for painting artists and art enthusiasts. Discover, collect and celebrate original art.</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-pinterest"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <a href="shop.html?cat=abstract">Abstract Art</a>
+        <a href="shop.html?cat=landscape">Landscapes</a>
+        <a href="shop.html?cat=portrait">Portraits</a>
+        <a href="shop.html?cat=modern">Modern Art</a>
+        <a href="shop.html?cat=watercolor">Watercolor</a>
+      </div>
+      <div class="footer-col">
+        <h4>Sell</h4>
+        <a href="vendor.html">Become a Vendor</a>
+        <a href="vendor.html#how">How it Works</a>
+        <a href="#">Artist Guidelines</a>
+        <a href="#">Pricing</a>
+      </div>
+      <div class="footer-col">
+        <h4>Help</h4>
+        <a href="#">FAQs</a>
+        <a href="#">Shipping Info</a>
+        <a href="#">Returns</a>
+        <a href="#">Contact Us</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 Cool Canvas. All rights reserved.</p>
+      <p>Designed with <span style="color: var(--secondary)">♥</span> for Art Lovers</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

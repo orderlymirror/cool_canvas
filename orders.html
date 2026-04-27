@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Orders – Cool Canvas</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    .orders-page { padding: 120px 20px 60px; max-width: 1000px; margin: 0 auto; min-height: 70vh; }
+    .orders-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; }
+    .orders-header h1 { font-size: 2.5rem; font-family: var(--font-head); }
+    
+    .order-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 30px; box-shadow: var(--shadow); }
+    .order-header { background: var(--bg); padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .order-id { font-weight: 600; color: var(--dark); }
+    .order-date { color: var(--gray); font-size: 0.9rem; }
+    .order-status { padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; background: #dcfce7; color: #166534; }
+    .order-status.processing { background: #fef08a; color: #854d0e; }
+    
+    .order-body { padding: 20px; }
+    .order-item { display: flex; gap: 20px; border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 20px; }
+    .order-item:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+    .order-item img { width: 100px; height: 100px; object-fit: cover; border-radius: 8px; }
+    .order-item-details { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+    .order-item-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 5px; }
+    .order-item-artist { color: var(--gray); font-size: 0.9rem; margin-bottom: 10px; }
+    .order-item-price { font-weight: 700; color: var(--primary); }
+    
+    .order-footer { padding: 15px 20px; background: var(--bg); border-top: 1px solid var(--border); text-align: right; }
+    .order-total { font-size: 1.1rem; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar scrolled" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="logo">
+      <span class="logo-icon">🎨</span>
+      <span class="logo-text">Cool<span class="logo-accent">Canvas</span></span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="shop.html" class="nav-link">Shop</a>
+      <a href="about.html" class="nav-link">About</a>
+    </div>
+    <div class="nav-actions">
+      <button class="btn-icon" id="searchToggle" title="Search"><i class="fas fa-search"></i></button>
+      <a href="cart.html" class="btn-icon" id="cartBtn" title="Cart">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </a>
+      <button class="btn-icon wishlist-btn" id="wishlistNavBtn" title="Wishlist">
+        <i class="fas fa-heart"></i>
+        <span class="cart-badge" id="wishlistBadge">0</span>
+      </button>
+      <div class="user-menu" id="userMenu">
+        <button class="btn-icon" id="userMenuBtn"><i class="fas fa-user-circle"></i></button>
+        <div class="dropdown" id="userDropdown">
+          <div id="guestLinks">
+            <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+            <a href="vendor.html"><i class="fas fa-palette"></i> Sell Your Art</a>
+          </div>
+          <div id="authLinks" style="display:none">
+            <a href="profile.html"><i class="fas fa-user"></i> My Profile</a>
+            <a href="orders.html" class="active"><i class="fas fa-box"></i> My Orders</a>
+            <a href="vendor.html" id="vendorDashLink" style="display:none"><i class="fas fa-store"></i> Vendor Dashboard</a>
+            <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          </div>
+        </div>
+      </div>
+      <button class="hamburger" id="hamburger"><i class="fas fa-bars"></i></button>
+    </div>
+  </div>
+  <div class="search-bar" id="searchBar">
+    <div class="search-inner">
+      <input type="text" placeholder="Search paintings, artists, styles…" id="searchInput" autocomplete="off"/>
+      <button onclick="doSearch()"><i class="fas fa-search"></i> Search</button>
+    </div>
+  </div>
+</nav>
+
+<div class="orders-page">
+  <div class="orders-header">
+    <h1>Order History</h1>
+    <a href="shop.html" class="btn-ghost" style="color:var(--dark) !important; border-color:var(--dark);">Continue Shopping</a>
+  </div>
+  
+  <div id="ordersContainer">
+    <!-- Fake Order 1 -->
+    <div class="order-card">
+      <div class="order-header">
+        <div>
+          <span class="order-id">Order #CC-9284</span>
+          <span class="order-date"> • Placed on Apr 12, 2026</span>
+        </div>
+        <span class="order-status">Delivered</span>
+      </div>
+      <div class="order-body">
+        <div class="order-item">
+          <img src="images/painting_landscape1.png" alt="Painting">
+          <div class="order-item-details">
+            <h3 class="order-item-title">Golden Hour Forest</h3>
+            <p class="order-item-artist">by Marcus Chen</p>
+            <span class="order-item-price">₹22,500</span>
+          </div>
+        </div>
+      </div>
+      <div class="order-footer">
+        <span class="order-total">Order Total: ₹22,500</span>
+      </div>
+    </div>
+    
+    <!-- Fake Order 2 -->
+    <div class="order-card">
+      <div class="order-header">
+        <div>
+          <span class="order-id">Order #CC-8102</span>
+          <span class="order-date"> • Placed on Apr 24, 2026</span>
+        </div>
+        <span class="order-status processing">Processing</span>
+      </div>
+      <div class="order-body">
+        <div class="order-item">
+          <img src="images/painting_abstract1.png" alt="Painting">
+          <div class="order-item-details">
+            <h3 class="order-item-title">Vibrant Cosmos</h3>
+            <p class="order-item-artist">by Elena Rivers</p>
+            <span class="order-item-price">₹15,000</span>
+          </div>
+        </div>
+      </div>
+      <div class="order-footer">
+        <span class="order-total">Order Total: ₹15,000</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- WISHLIST SIDEBAR -->
+<div class="wishlist-sidebar" id="wishlistSidebar">
+  <div class="sidebar-header">
+    <h3>💖 My Wishlist</h3>
+    <button onclick="closeWishlist()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="sidebar-items" id="wishlistItems"></div>
+</div>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeWishlist()"></div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><span class="logo-icon">🎨</span><span class="logo-text">Cool<span class="logo-accent">Canvas</span></span></div>
+        <p>The paradise for painting artists and art enthusiasts. Discover, collect and celebrate original art.</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-pinterest"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <a href="shop.html?cat=abstract">Abstract Art</a>
+        <a href="shop.html?cat=landscape">Landscapes</a>
+        <a href="shop.html?cat=portrait">Portraits</a>
+        <a href="shop.html?cat=modern">Modern Art</a>
+        <a href="shop.html?cat=watercolor">Watercolor</a>
+      </div>
+      <div class="footer-col">
+        <h4>Sell</h4>
+        <a href="vendor.html">Become a Vendor</a>
+        <a href="vendor.html#how">How it Works</a>
+        <a href="#">Artist Guidelines</a>
+        <a href="#">Pricing</a>
+      </div>
+      <div class="footer-col">
+        <h4>Help</h4>
+        <a href="#">FAQs</a>
+        <a href="#">Shipping Info</a>
+        <a href="#">Returns</a>
+        <a href="#">Contact Us</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 Cool Canvas. All rights reserved.</p>
+      <p>Designed with <span style="color: var(--secondary)">♥</span> for Art Lovers</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const user = JSON.parse(localStorage.getItem('coolcanvas_user'));
+    if (!user) {
+      window.location.href = 'login.html';
+      return;
+    }
+  });
+</script>
+</body>
+</html>

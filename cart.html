@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shopping Cart – Cool Canvas</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    .cart-page { padding: 120px 20px 60px; max-width: 1200px; margin: 0 auto; display: flex; gap: 40px; }
+    .cart-items-section { flex: 2; }
+    .cart-summary { flex: 1; background: var(--surface); padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); height: fit-content; position: sticky; top: 100px; }
+    .cart-item { display: flex; gap: 20px; padding: 20px; border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 20px; background: var(--surface); }
+    .cart-item-img { width: 120px; height: 120px; border-radius: 8px; object-fit: cover; }
+    .cart-item-details { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    .cart-item-header { display: flex; justify-content: space-between; align-items: flex-start; }
+    .cart-item-title { font-size: 1.2rem; font-family: var(--font-head); }
+    .cart-item-artist { color: var(--gray); font-size: 0.9rem; }
+    .cart-item-price { font-weight: 700; font-size: 1.1rem; color: var(--primary); }
+    .cart-item-controls { display: flex; justify-content: space-between; align-items: center; }
+    .qty-controls { display: flex; align-items: center; gap: 10px; border: 1px solid var(--border); padding: 5px; border-radius: 20px; }
+    .qty-btn { width: 25px; height: 25px; border-radius: 50%; background: var(--bg); display: flex; align-items: center; justify-content: center; font-weight: bold; }
+    .qty-btn:hover { background: var(--primary); color: white; }
+    .remove-btn { color: #ef4444; background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 5px; font-size: 0.9rem; }
+    .remove-btn:hover { text-decoration: underline; }
+    
+    .summary-row { display: flex; justify-content: space-between; margin-bottom: 15px; color: var(--text); }
+    .summary-row.total { font-size: 1.3rem; font-weight: 700; border-top: 1px solid var(--border); padding-top: 15px; margin-top: 15px; }
+    .checkout-btn { width: 100%; margin-top: 20px; padding: 15px; font-size: 1.1rem; }
+    
+    @media (max-width: 768px) {
+      .cart-page { flex-direction: column; }
+      .cart-item { flex-direction: column; }
+      .cart-item-img { width: 100%; height: 200px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar scrolled" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="logo">
+      <span class="logo-icon">🎨</span>
+      <span class="logo-text">Cool<span class="logo-accent">Canvas</span></span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="shop.html" class="nav-link">Shop</a>
+      <a href="about.html" class="nav-link">About</a>
+    </div>
+    <div class="nav-actions">
+      <button class="btn-icon" id="searchToggle" title="Search"><i class="fas fa-search"></i></button>
+      <a href="cart.html" class="btn-icon" id="cartBtn" title="Cart">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </a>
+      <button class="btn-icon wishlist-btn" id="wishlistNavBtn" title="Wishlist">
+        <i class="fas fa-heart"></i>
+        <span class="cart-badge" id="wishlistBadge">0</span>
+      </button>
+      <div class="user-menu" id="userMenu">
+        <button class="btn-icon" id="userMenuBtn"><i class="fas fa-user-circle"></i></button>
+        <div class="dropdown" id="userDropdown">
+          <div id="guestLinks">
+            <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+            <a href="vendor.html"><i class="fas fa-palette"></i> Sell Your Art</a>
+          </div>
+          <div id="authLinks" style="display:none">
+            <a href="profile.html"><i class="fas fa-user"></i> My Profile</a>
+            <a href="orders.html"><i class="fas fa-box"></i> My Orders</a>
+            <a href="vendor.html" id="vendorDashLink" style="display:none"><i class="fas fa-store"></i> Vendor Dashboard</a>
+            <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          </div>
+        </div>
+      </div>
+      <button class="hamburger" id="hamburger"><i class="fas fa-bars"></i></button>
+    </div>
+  </div>
+  <!-- Search Bar -->
+  <div class="search-bar" id="searchBar">
+    <div class="search-inner">
+      <input type="text" placeholder="Search paintings, artists, styles…" id="searchInput" autocomplete="off"/>
+      <button onclick="doSearch()"><i class="fas fa-search"></i> Search</button>
+    </div>
+  </div>
+</nav>
+
+<div class="cart-page">
+  <div class="cart-items-section">
+    <h1 style="font-size:2.5rem; margin-bottom:30px;">Your Cart</h1>
+    <div id="cartContainer"></div>
+  </div>
+  
+  <div class="cart-summary" id="cartSummary" style="display:none;">
+    <h3 style="margin-bottom:20px; font-size:1.5rem; font-family:var(--font-head);">Order Summary</h3>
+    <div class="summary-row">
+      <span>Subtotal</span>
+      <span id="summarySubtotal">₹0</span>
+    </div>
+    <div class="summary-row">
+      <span>Shipping</span>
+      <span>Free</span>
+    </div>
+    <div class="summary-row total">
+      <span>Total</span>
+      <span id="summaryTotal">₹0</span>
+    </div>
+    <button class="btn-primary checkout-btn" onclick="checkout()">Proceed to Checkout <i class="fas fa-lock"></i></button>
+    <p style="text-align:center; font-size:0.8rem; color:var(--gray); margin-top:15px;">Secure Payment Processing</p>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><span class="logo-icon">🎨</span><span class="logo-text">Cool<span class="logo-accent">Canvas</span></span></div>
+        <p>The paradise for painting artists and art enthusiasts. Discover, collect and celebrate original art.</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-pinterest"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <a href="shop.html?cat=abstract">Abstract Art</a>
+        <a href="shop.html?cat=landscape">Landscapes</a>
+        <a href="shop.html?cat=portrait">Portraits</a>
+        <a href="shop.html?cat=modern">Modern Art</a>
+        <a href="shop.html?cat=watercolor">Watercolor</a>
+      </div>
+      <div class="footer-col">
+        <h4>Sell</h4>
+        <a href="vendor.html">Become a Vendor</a>
+        <a href="vendor.html#how">How it Works</a>
+        <a href="#">Artist Guidelines</a>
+        <a href="#">Pricing</a>
+      </div>
+      <div class="footer-col">
+        <h4>Help</h4>
+        <a href="#">FAQs</a>
+        <a href="#">Shipping Info</a>
+        <a href="#">Returns</a>
+        <a href="#">Contact Us</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 Cool Canvas. All rights reserved.</p>
+      <p>Designed with <span style="color: var(--secondary)">♥</span> for Art Lovers</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/app.js"></script>
+<script>
+  function renderCart() {
+    const container = document.getElementById('cartContainer');
+    const summary = document.getElementById('cartSummary');
+    
+    if (cart.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state" style="background:var(--surface); padding:50px; border-radius:var(--radius); border:1px solid var(--border);">
+          <i class="fas fa-shopping-cart" style="font-size:4rem; color:var(--border); margin-bottom:20px;"></i>
+          <h2>Your cart is empty</h2>
+          <p style="color:var(--gray); margin-bottom:20px;">Looks like you haven't added any artworks yet.</p>
+          <a href="shop.html" class="btn-primary">Continue Shopping</a>
+        </div>
+      `;
+      summary.style.display = 'none';
+      return;
+    }
+    
+    container.innerHTML = cart.map(item => `
+      <div class="cart-item">
+        <img src="${item.image}" alt="${item.title}" class="cart-item-img">
+        <div class="cart-item-details">
+          <div class="cart-item-header">
+            <div>
+              <h3 class="cart-item-title">${item.title}</h3>
+              <p class="cart-item-artist">by ${item.artist}</p>
+            </div>
+            <div class="cart-item-price">${formatPrice(item.price * item.quantity)}</div>
+          </div>
+          <div class="cart-item-controls">
+            <div class="qty-controls">
+              <button class="qty-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
+              <span style="width:20px; text-align:center; font-weight:600;">${item.quantity}</span>
+              <button class="qty-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+            </div>
+            <button class="remove-btn" onclick="removeFromCart(${item.id})">
+              <i class="fas fa-trash"></i> Remove
+            </button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+    
+    summary.style.display = 'block';
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    document.getElementById('summarySubtotal').textContent = formatPrice(total);
+    document.getElementById('summaryTotal').textContent = formatPrice(total);
+  }
+  
+  function checkout() {
+    // Check if user is logged in
+    const user = JSON.parse(localStorage.getItem('coolcanvas_user'));
+    if (!user) {
+      showToast('Please login to continue checkout');
+      setTimeout(() => { window.location.href = 'login.html?redirect=cart'; }, 1500);
+      return;
+    }
+    
+    // Fake payment process
+    showToast('Processing payment...');
+    setTimeout(() => {
+      cart = [];
+      saveCart();
+      renderCart();
+      container.innerHTML = `
+        <div style="text-align:center; padding:50px; background:var(--surface); border-radius:var(--radius);">
+          <div style="font-size:4rem; color:var(--secondary); margin-bottom:20px;">🎉</div>
+          <h2>Payment Successful!</h2>
+          <p>Thank you for your order. The artist is preparing your masterpiece.</p>
+          <a href="shop.html" class="btn-primary" style="margin-top:20px;">Continue Shopping</a>
+        </div>
+      `;
+      summary.style.display = 'none';
+    }, 2000);
+  }
+  
+  document.addEventListener('DOMContentLoaded', renderCart);
+</script>
+</body>
+</html>
